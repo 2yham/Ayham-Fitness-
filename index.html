@@ -108,7 +108,7 @@
                     <span class="text-[#ccff00] text-xs">●</span>
                 </button>
                 <button onclick="navigateTo('next-section')" class="w-full text-right py-3 px-4 rounded-xl bg-zinc-900/70 border border-zinc-800 hover:border-[#ccff00] hover:text-[#ccff00] text-base font-extrabold transition cursor-pointer flex items-center justify-between">
-                    <span>حاسبة السعرات</span>
+                    <span>حاسبة السعرات والماكروز</span>
                     <i class="fa-solid fa-calculator text-[#ccff00] text-xs"></i>
                 </button>
                 <button onclick="navigateTo('training-package-section')" class="w-full text-right py-3 px-4 rounded-xl bg-zinc-900/70 border border-zinc-800 hover:border-[#ccff00] hover:text-[#ccff00] text-base font-extrabold transition cursor-pointer flex items-center justify-between">
@@ -165,50 +165,50 @@
             </div>
         </section>
 
-        <!-- القسم الثاني: حاسبة السعرات الحرارية الدقيقة (تفتح عند الضغط على "ابدأ الآن") -->
+        <!-- القسم الثاني: حاسبة السعرات والماكروز الدقيقة (تفتح عند الضغط على "ابدأ الآن") -->
         <section id="next-section" class="hidden w-full max-w-lg flex flex-col items-center justify-center my-auto fade-in py-4 text-right">
-            <div class="w-full bg-zinc-950 border border-zinc-800/80 p-6 sm:p-8 rounded-3xl shadow-2xl">
+            <div class="w-full bg-zinc-950 border border-zinc-800/80 p-6 sm:p-8 rounded-3xl shadow-2xl flex flex-col gap-5">
                 
                 <!-- رأس الحاسبة -->
-                <div class="text-center mb-6 border-b border-zinc-800 pb-4">
-                    <h2 class="text-2xl sm:text-3xl font-black text-white mb-2">احسب <span class="neon-text">سعرات ثباتك</span></h2>
+                <div class="text-center border-b border-zinc-800 pb-4">
+                    <h2 class="text-2xl sm:text-3xl font-black text-white mb-2">حاسبة <span class="neon-text">السعرات والماكروز</span></h2>
                     <p class="text-zinc-400 text-xs sm:text-sm leading-relaxed">
-                        إجمالي الإنفاق اليومي للطاقة (TDEE) هو نقطة البدايه. إما أن تحسبه بدقة عبر الحاسبة بالأسفل.
+                        أدخل بياناتك وحدد هدفك لحساب سعراتك والماكروز بدقة عالية.
                     </p>
                 </div>
 
-                <div class="flex flex-col gap-4">
-                    <!-- الجنس -->
-                    <div>
-                        <label class="block text-xs font-extrabold text-zinc-300 mb-1">الجنس</label>
-                        <select id="calc-gender" class="w-full custom-input rounded-xl px-3.5 py-2.5 text-sm font-semibold cursor-pointer">
-                            <option value="male">ذكر</option>
-                            <option value="female">أنثى</option>
-                        </select>
+                <!-- مربع بيانات الجسم -->
+                <div class="bg-zinc-900/60 border border-zinc-800 p-4 rounded-2xl flex flex-col gap-3.5">
+                    <span class="text-xs font-black text-[#ccff00] uppercase tracking-wider mb-0.5">1. بيانات الجسم والنشاط</span>
+                    
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-[11px] font-extrabold text-zinc-300 mb-1">الجنس</label>
+                            <select id="calc-gender" class="w-full custom-input rounded-xl px-3 py-2 text-xs font-semibold cursor-pointer">
+                                <option value="male">ذكر</option>
+                                <option value="female">أنثى</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-extrabold text-zinc-300 mb-1">العمر (سنة)</label>
+                            <input type="number" id="calc-age" value="25" min="10" max="100" class="w-full custom-input rounded-xl px-3 py-2 text-xs font-semibold">
+                        </div>
                     </div>
 
-                    <!-- العمر -->
-                    <div>
-                        <label class="block text-xs font-extrabold text-zinc-300 mb-1">العمر (سنة)</label>
-                        <input type="number" id="calc-age" value="25" min="10" max="100" class="w-full custom-input rounded-xl px-3.5 py-2.5 text-sm font-semibold">
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-[11px] font-extrabold text-zinc-300 mb-1">الوزن (كغ)</label>
+                            <input type="number" id="calc-weight" value="75" min="30" max="300" class="w-full custom-input rounded-xl px-3 py-2 text-xs font-semibold">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-extrabold text-zinc-300 mb-1">الطول (سم)</label>
+                            <input type="number" id="calc-height" value="175" min="100" max="250" class="w-full custom-input rounded-xl px-3 py-2 text-xs font-semibold">
+                        </div>
                     </div>
 
-                    <!-- الوزن -->
                     <div>
-                        <label class="block text-xs font-extrabold text-zinc-300 mb-1">الوزن (كغ)</label>
-                        <input type="number" id="calc-weight" value="75" min="30" max="300" class="w-full custom-input rounded-xl px-3.5 py-2.5 text-sm font-semibold">
-                    </div>
-
-                    <!-- الطول -->
-                    <div>
-                        <label class="block text-xs font-extrabold text-zinc-300 mb-1">الطول (سم)</label>
-                        <input type="number" id="calc-height" value="175" min="100" max="250" class="w-full custom-input rounded-xl px-3.5 py-2.5 text-sm font-semibold">
-                    </div>
-
-                    <!-- مستوى النشاط -->
-                    <div>
-                        <label class="block text-xs font-extrabold text-zinc-300 mb-1">مستوى النشاط</label>
-                        <select id="calc-activity" class="w-full custom-input rounded-xl px-3.5 py-2.5 text-sm font-semibold cursor-pointer">
+                        <label class="block text-[11px] font-extrabold text-zinc-300 mb-1">مستوى النشاط</label>
+                        <select id="calc-activity" class="w-full custom-input rounded-xl px-3 py-2 text-xs font-semibold cursor-pointer">
                             <option value="1.2">خامل (عمل مكتبي، بدون رياضة)</option>
                             <option value="1.375">خفيف (1-3 جلسات أسبوعياً)</option>
                             <option value="1.55" selected>معتدل (3-5 جلسات أسبوعياً)</option>
@@ -216,33 +216,63 @@
                             <option value="1.9">رياضي (عمل بدني + تدريب)</option>
                         </select>
                     </div>
+                </div>
 
-                    <!-- زر الحساب -->
-                    <button onclick="calculateCalories()" class="w-full neon-btn active:scale-95 font-black text-base py-3.5 px-6 rounded-2xl transition cursor-pointer mt-2 shadow-[0_0_20px_rgba(204,255,0,0.3)]">
-                        احسبها
-                    </button>
+                <!-- مربع تحديد الهدف -->
+                <div class="bg-zinc-900/60 border border-zinc-800 p-4 rounded-2xl flex flex-col gap-3.5">
+                    <span class="text-xs font-black text-[#ccff00] uppercase tracking-wider mb-0.5">2. هدفك الأساسي</span>
+                    <div>
+                        <select id="calc-goal" class="w-full custom-input rounded-xl px-3.5 py-2.5 text-sm font-semibold cursor-pointer">
+                            <option value="cut">تنشيف (خسارة دهون - عجز 20%)</option>
+                            <option value="maintain" selected>ثبات الوزن (المحافظة على الشكل الحالي)</option>
+                            <option value="bulk">تضخيم (زيادة عضلية نظيفة - فائض 15%)</option>
+                        </select>
+                    </div>
+                </div>
 
-                    <!-- التنبيه الواقعي -->
-                    <div class="mt-2 bg-[#221c08] border border-[#f59e0b]/40 p-3.5 rounded-2xl text-right">
-                        <div class="flex items-start gap-2.5">
-                            <i class="fa-solid fa-triangle-exclamation text-[#f59e0b] text-base shrink-0 mt-0.5"></i>
-                            <p class="text-[11px] sm:text-xs font-bold text-zinc-300 leading-relaxed">
-                                <span class="text-[#f59e0b] font-black">تنبيه واقعي:</span> جسمك يخضع لقوانين الديناميكا الحرارية، لكن حاسبات السعرات لا تلتقط كل شيء. NEAT (الحرارة الناتجة من النشاط غير الرياضي)، نشاط الغدة الدرقية، والتكيف الحراري قد تغير TDEE بمقدار ±300 سعرة. اعتبر هذا الرقم <span class="text-[#ccff00] font-black">نقطة بداية</span> – عدّل بناءً على متوسطات الوزن لمدة أسبوعين، لا التذبذبات اليومية.
-                            </p>
+                <!-- زر الحساب -->
+                <button onclick="calculateCalories()" class="w-full neon-btn active:scale-95 font-black text-base py-3.5 px-6 rounded-2xl transition cursor-pointer shadow-[0_0_20px_rgba(204,255,0,0.3)]">
+                    احسب سعراتك والماكروز
+                </button>
+
+                <!-- مربع النتائج (السعرات + الماكروز) -->
+                <div class="bg-gradient-to-b from-zinc-900 to-black border-2 border-[#ccff00]/60 p-5 rounded-2xl text-center shadow-[0_0_25px_rgba(204,255,0,0.15)] flex flex-col gap-4">
+                    <div>
+                        <span class="text-xs font-extrabold text-zinc-400 tracking-wider block mb-1">السعرات المستهدفة لهدفك</span>
+                        <div class="text-3xl sm:text-4xl font-black neon-text" id="result-calories">2,672 <span class="text-base font-bold text-zinc-300">kcal</span></div>
+                    </div>
+
+                    <!-- تفصيل الماكروز في مربعات فرعية منظمة -->
+                    <div class="grid grid-cols-3 gap-2 pt-3 border-t border-zinc-800">
+                        <div class="bg-black/80 border border-zinc-800 p-2.5 rounded-xl text-center">
+                            <span class="block text-[10px] font-extrabold text-zinc-400 mb-1">بروتين</span>
+                            <span class="text-base sm:text-lg font-black text-[#ccff00]" id="result-protein">165g</span>
+                        </div>
+                        <div class="bg-black/80 border border-zinc-800 p-2.5 rounded-xl text-center">
+                            <span class="block text-[10px] font-extrabold text-zinc-400 mb-1">دهون صحية</span>
+                            <span class="text-base sm:text-lg font-black text-[#ccff00]" id="result-fats">75g</span>
+                        </div>
+                        <div class="bg-black/80 border border-zinc-800 p-2.5 rounded-xl text-center">
+                            <span class="block text-[10px] font-extrabold text-zinc-400 mb-1">كاربوهيدرات</span>
+                            <span class="text-base sm:text-lg font-black text-[#ccff00]" id="result-carbs">315g</span>
                         </div>
                     </div>
-
-                    <!-- صندوق عرض النتيجة البارز -->
-                    <div class="mt-3 bg-gradient-to-b from-zinc-900 to-black border-2 border-[#ccff00]/60 p-6 rounded-2xl text-center shadow-[0_0_25px_rgba(204,255,0,0.15)]">
-                        <span class="text-xs font-extrabold text-zinc-400 tracking-wider block mb-2">سعرات الثبات المقدرة</span>
-                        <div class="text-4xl sm:text-5xl font-black neon-text" id="result-calories">2,672 <span class="text-lg font-bold text-zinc-300">kcal</span></div>
-                    </div>
-
-                    <!-- زر العودة للرئيسية -->
-                    <button onclick="navigateTo('home-section')" class="bg-zinc-900 hover:bg-zinc-800 text-zinc-300 hover:text-[#ccff00] text-xs font-extrabold py-3 px-6 rounded-xl transition border border-zinc-800 hover:border-[#ccff00] cursor-pointer mt-2">
-                        ← العودة للرئيسية
-                    </button>
                 </div>
+
+                <!-- التنبيه الواقعي -->
+                <div class="bg-[#221c08] border border-[#f59e0b]/40 p-3.5 rounded-2xl text-right">
+                    <div class="flex items-start gap-2.5">
+                        <i class="fa-solid fa-triangle-exclamation text-[#f59e0b] text-base shrink-0 mt-0.5"></i>
+                        <p class="text-[11px] sm:text-xs font-bold text-zinc-300 leading-relaxed">
+                            <span class="text-[#f59e0b] font-black">تنبيه واقعي:</span> جسمك يخضع لقوانين الديناميكا الحرارية، لكن حاسبات السعرات لا تلتقط كل شيء. NEAT، نشاط الغدة الدرقية، والتكيف الحراري قد تغير النتائج بمقدار ±300 سعرة. اعتبر هذا الرقم <span class="text-[#ccff00] font-black">نقطة بداية</span> – عدّل بناءً على متوسطات الوزن لمدة أسبوعين، لا التذبذبات اليومية.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- زر العودة للرئيسية -->
+                <button onclick="navigateTo('home-section')" class="bg-zinc-900 hover:bg-zinc-800 text-zinc-300 hover:text-[#ccff00] text-xs font-extrabold py-3 px-6 rounded-xl transition border border-zinc-800 hover:border-[#ccff00] cursor-pointer">
+                    ← العودة للرئيسية
+                </button>
             </div>
         </section>
 
@@ -470,13 +500,14 @@
             calculateCalories();
         });
 
-        // دالة حساب السعرات الدقيقة (Mifflin-St Jeor Equation)
+        // دالة حساب السعرات والماكروز الدقيقة
         function calculateCalories() {
             const gender = document.getElementById('calc-gender').value;
             const age = parseFloat(document.getElementById('calc-age').value) || 25;
             const weight = parseFloat(document.getElementById('calc-weight').value) || 75;
             const height = parseFloat(document.getElementById('calc-height').value) || 175;
             const activity = parseFloat(document.getElementById('calc-activity').value) || 1.55;
+            const goal = document.getElementById('calc-goal').value;
 
             // معادلة Mifflin-St Jeor لحساب BMR
             let bmr = (10 * weight) + (6.25 * height) - (5 * age);
@@ -487,10 +518,35 @@
             }
 
             // حساب TDEE (إجمالي الإنفاق اليومي للطاقة)
-            const tdee = Math.round(bmr * activity);
+            let tdee = bmr * activity;
 
-            // عرض النتيجة
-            document.getElementById('result-calories').innerHTML = `${tdee.toLocaleString()} <span class="text-lg font-bold text-zinc-300">kcal</span>`;
+            // تعديل السعرات بناءً على الهدف
+            if (goal === 'cut') {
+                tdee *= 0.80; // عجز 20% للتنشيف
+            } else if (goal === 'bulk') {
+                tdee *= 1.15; // فائض 15% للتضخيم
+            }
+
+            const targetCalories = Math.round(tdee);
+
+            // حساب الماكروز بدقة علمية واحترافية
+            // البروتين: 2.2 جرام لكل كيلو من الوزن
+            const proteinGrams = Math.round(weight * 2.2);
+            const proteinCalories = proteinGrams * 4;
+
+            // الدهون: 25% من إجمالي السعرات
+            const fatCalories = targetCalories * 0.25;
+            const fatGrams = Math.round(fatCalories / 9);
+
+            // الكاربوهيدرات: باقي السعرات
+            const carbCalories = targetCalories - (proteinCalories + fatCalories);
+            const carbGrams = Math.max(0, Math.round(carbCalories / 4));
+
+            // عرض النتائج
+            document.getElementById('result-calories').innerHTML = `${targetCalories.toLocaleString()} <span class="text-base font-bold text-zinc-300">kcal</span>`;
+            document.getElementById('result-protein').textContent = `${proteinGrams}g`;
+            document.getElementById('result-fats').textContent = `${fatGrams}g`;
+            document.getElementById('result-carbs').textContent = `${carbGrams}g`;
         }
 
         function sendToWhatsApp(event) {
