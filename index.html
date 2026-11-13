@@ -2,47 +2,45 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>A FITNESS</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
-        html, body {
+        body {
             font-family: 'Cairo', sans-serif;
             background-color: #000000;
             color: #ffffff;
             margin: 0;
             padding: 0;
-            height: 100dvh;
-            overflow: hidden; /* تثبيت الشاشة ومنع النزول والطلوع */
         }
         .fade-in {
-            animation: fadeIn 0.35s ease-out forwards;
+            animation: fadeIn 0.4s ease-out forwards;
         }
         @keyframes fadeIn {
-            from { opacity: 0; transform: scale(0.97); }
-            to { opacity: 1; transform: scale(1); }
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
         }
         .neon-btn {
             background-color: #ccff00;
             color: #000000;
-            box-shadow: 0 0 20px rgba(204, 255, 0, 0.45);
+            box-shadow: 0 0 25px rgba(204, 255, 0, 0.45);
         }
         .neon-btn:hover {
             background-color: #d9ff33;
-            box-shadow: 0 0 30px rgba(204, 255, 0, 0.75);
+            box-shadow: 0 0 35px rgba(204, 255, 0, 0.75);
         }
         .neon-text {
             color: #ccff00;
-            text-shadow: 0 0 12px rgba(204, 255, 0, 0.35);
+            text-shadow: 0 0 15px rgba(204, 255, 0, 0.35);
         }
     </style>
 </head>
-<body class="h-[100dvh] flex flex-col justify-between bg-black text-white selection:bg-[#ccff00] selection:text-black overflow-hidden relative">
+<body class="min-h-screen flex flex-col justify-between bg-black text-white selection:bg-[#ccff00] selection:text-black">
 
     <!-- الشريط العلوي: أيقونة الثلاث شحطات بلمسة فسفورية -->
-    <header class="w-full px-5 pt-4 pb-2 flex items-center justify-between z-20">
+    <header class="w-full px-6 pt-5 pb-2 flex items-center justify-between">
         <button onclick="toggleMenu()" aria-label="القائمة" class="p-2.5 rounded-xl border border-zinc-800 bg-zinc-950 hover:border-[#ccff00] transition group cursor-pointer">
             <div class="w-6 flex flex-col gap-1.5">
                 <span class="block h-0.5 w-full bg-[#ccff00] rounded-full transition-all group-hover:w-4"></span>
@@ -56,117 +54,61 @@
         </span>
     </header>
 
-    <!-- القائمة الجانبية المنبثقة عند الضغط على الثلاث شحطات -->
+    <!-- القائمة الجانبية (تحتوي على خيار "عني" بلمسات فسفورية) -->
     <div id="side-menu" class="fixed inset-0 bg-black/95 backdrop-blur-md z-50 hidden flex-col justify-between p-6 fade-in">
         <div class="flex items-center justify-between">
             <span class="text-xl font-black uppercase">A <span class="neon-text">FITNESS</span></span>
-            <button onclick="toggleMenu()" class="w-10 h-10 rounded-full border border-zinc-800 text-[#ccff00] hover:bg-[#ccff00] hover:text-black flex items-center justify-center text-lg font-bold transition cursor-pointer">
+            <button onclick="toggleMenu()" class="w-10 h-10 rounded-full border border-[#ccff00]/50 text-[#ccff00] hover:bg-[#ccff00] hover:text-black flex items-center justify-center text-lg font-bold transition cursor-pointer">
                 ✕
             </button>
         </div>
 
-        <nav class="flex flex-col gap-4 my-auto text-center">
-            <button onclick="navigateTo('home-section')" class="py-3.5 px-6 rounded-2xl bg-zinc-900/80 border border-zinc-800 hover:border-[#ccff00] hover:text-[#ccff00] text-lg font-extrabold transition cursor-pointer">
+        <nav class="flex flex-col gap-4 my-auto text-center max-w-sm mx-auto w-full">
+            <button onclick="navigateTo('home-section')" class="py-4 px-6 rounded-2xl bg-zinc-900/90 border border-zinc-800 hover:border-[#ccff00] text-white hover:text-[#ccff00] text-lg font-extrabold transition cursor-pointer">
                 الرئيسية
             </button>
-            <button onclick="navigateTo('next-section')" class="py-3.5 px-6 rounded-2xl bg-zinc-900/80 border border-zinc-800 hover:border-[#ccff00] hover:text-[#ccff00] text-lg font-extrabold transition cursor-pointer">
-                الخطوة الثانية / البرامج
-            </button>
-            <button onclick="navigateTo('about-section')" class="py-3.5 px-6 rounded-2xl bg-zinc-900/80 border border-zinc-800 hover:border-[#ccff00] hover:text-[#ccff00] text-lg font-extrabold transition cursor-pointer">
-                عن المدرب أيهم
+            <button onclick="navigateTo('about-section')" class="py-4 px-6 rounded-2xl bg-[#ccff00]/10 border border-[#ccff00] text-[#ccff00] hover:bg-[#ccff00] hover:text-black text-lg font-black shadow-[0_0_20px_rgba(204,255,0,0.2)] transition cursor-pointer">
+                عني
             </button>
         </nav>
 
         <div class="text-center text-xs text-zinc-500 font-semibold">
-            اختر القسم للانتقال مباشرة
+            A FITNESS &bull; القائمة
         </div>
     </div>
 
-    <!-- القسم الأول: الرئيسية (ثابتة ومتمركزة في منتصف الشاشة) -->
-    <main id="home-section" class="flex-grow flex flex-col items-center justify-center px-6 text-center">
-        <!-- الشعار -->
-        <div class="mb-4 flex items-center justify-center">
+    <!-- القسم الأول: الصفحة الرئيسية (نفس الشكل السابق مع إمكانية الطلوع والنزول) -->
+    <main id="home-section" class="flex-grow flex flex-col items-center justify-center px-6 py-12 text-center min-h-[75vh]">
+        
+        <!-- الشعار الخاص بك في المنتصف -->
+        <div class="mb-8 flex items-center justify-center">
             <img id="brand-logo" 
-                 src="./logo.png" 
+                 src="logo.png" 
                  alt="A FITNESS" 
                  onerror="handleImageError(this)"
-                 class="w-32 h-32 md:w-36 md:h-36 mx-auto object-contain rounded-2xl">
+                 class="w-44 h-44 mx-auto object-contain rounded-2xl">
             
-            <div id="fallback-logo" class="hidden w-28 h-28 rounded-3xl border-2 border-[#ccff00] bg-[#ccff00]/10 flex items-center justify-center shadow-[0_0_25px_rgba(204,255,0,0.2)]">
-                <span class="text-6xl font-black neon-text">A</span>
+            <!-- شعار بديل يظهر فقط إذا لم يجد ملف الصورة في المستودع -->
+            <div id="fallback-logo" class="hidden w-36 h-36 rounded-3xl border-2 border-[#ccff00] bg-[#ccff00]/10 flex items-center justify-center shadow-[0_0_30px_rgba(204,255,0,0.2)]">
+                <span class="text-7xl font-black neon-text">A</span>
             </div>
         </div>
 
         <!-- العنوان الرئيسي -->
-        <h1 class="text-3xl md:text-4xl font-black tracking-wider mb-1.5 uppercase">
+        <h1 class="text-4xl md:text-5xl font-black tracking-wider mb-3 uppercase">
             A <span class="neon-text">FITNESS</span>
         </h1>
         
-        <p class="text-zinc-400 text-sm md:text-base max-w-xs mb-6 font-semibold">
+        <p class="text-zinc-400 text-base md:text-lg max-w-sm mb-10 font-semibold">
             ابـدأ الـتـغـيـيـر الـحـقـيـقـي الآن
         </p>
 
         <!-- زر ابدأ الآن -->
-        <button onclick="navigateTo('next-section')" class="w-full max-w-[240px] neon-btn active:scale-95 font-black text-lg py-3.5 px-6 rounded-full transition-all duration-200 cursor-pointer">
+        <button onclick="navigateTo('next-section')" class="w-full max-w-xs neon-btn active:scale-95 font-black text-xl py-4 px-8 rounded-full transition-all duration-200 cursor-pointer">
             ابدأ الآن
         </button>
+
     </main>
 
-    <!-- القسم الثاني: الخانة التالية -->
-    <section id="next-section" class="hidden flex-grow flex flex-col items-center justify-center px-6 text-center fade-in">
-        <div class="w-full max-w-sm">
-            <h2 class="text-2xl font-black mb-3 text-white">الخطوة <span class="neon-text">الثانية</span></h2>
-            <p class="text-zinc-400 text-sm mb-6 leading-relaxed">
-                أهلاً بك! إحكيلي شو بدك نحط جوا هاي الخانة هسا عشان أبرمجلك إياها فوراً.
-            </p>
-            <button onclick="navigateTo('home-section')" class="text-zinc-300 hover:text-[#ccff00] border border-zinc-800 hover:border-[#ccff00] px-5 py-2 rounded-full text-xs font-bold transition cursor-pointer">
-                → رجوع للرئيسية
-            </button>
-        </div>
-    </section>
-
-    <!-- القسم الثالث: عن المدرب (إضافي للقائمة) -->
-    <section id="about-section" class="hidden flex-grow flex flex-col items-center justify-center px-6 text-center fade-in">
-        <div class="w-full max-w-sm">
-            <h2 class="text-2xl font-black mb-3 text-white">عن <span class="neon-text">A FITNESS</span></h2>
-            <p class="text-zinc-400 text-sm mb-6 leading-relaxed">
-                تدريب وتأهيل بدني مبني على أسس علمية للوصول لأفضل نسخة من جسمك وقوتك.
-            </p>
-            <button onclick="navigateTo('home-section')" class="text-zinc-300 hover:text-[#ccff00] border border-zinc-800 hover:border-[#ccff00] px-5 py-2 rounded-full text-xs font-bold transition cursor-pointer">
-                → رجوع للرئيسية
-            </button>
-        </div>
-    </section>
-
-    <!-- التذييل السفلي: صغير ومنتظم ومثبت أسفل الشاشة -->
-    <footer class="w-full shrink-0">
-        <!-- خانة وسائل التواصل الاجتماعي الفسفورية بحجم صغير ومنتظم -->
-        <div class="w-full bg-[#ccff00] py-2.5 px-4 flex flex-col items-center justify-center gap-1.5">
-            <span class="text-[#141824] text-xs font-black tracking-wide">
-                وسائل التواصل الاجتماعي
-            </span>
-            
-            <div class="flex items-center justify-center gap-3">
-                <a href="https://www.instagram.com/2yhamm/" target="_blank" rel="noopener noreferrer" aria-label="Instagram"
-                   class="w-8 h-8 bg-[#141824] text-[#ccff00] rounded-lg flex items-center justify-center text-base hover:scale-110 active:scale-95 transition-transform">
-                    <i class="fa-brands fa-instagram"></i>
-                </a>
-
-                <a href="https://www.snapchat.com/add/eldwaymeh" target="_blank" rel="noopener noreferrer" aria-label="Snapchat"
-                   class="w-8 h-8 bg-[#141824] text-[#ccff00] rounded-lg flex items-center justify-center text-base hover:scale-110 active:scale-95 transition-transform">
-                    <i class="fa-brands fa-snapchat"></i>
-                </a>
-            </div>
-        </div>
-
-        <!-- خانة حقوق النشر البيضاء بحجم صغير ومنتظم -->
-        <div class="w-full bg-white text-black py-1.5 px-4 text-center text-[11px] font-extrabold">
-            جميع الحقوق محفوظة &copy; 2026 A FITNESS
-        </div>
-    </footer>
-
-    <script>
-        let attempt = 0;
-        const possibleNames = ['./logo.jpg', './logo.jpeg', './LOGO.PNG', './LOGO.JPG'];
-        
-        function handleImageError(img
+    <!-- القسم الثاني: الخانة التالية (تظهر عند الضغط على ابدأ الآن) -->
+    <section id="next-section" class="hidden flex-grow flex flex-col items-center justify-center px-6 py-
