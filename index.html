@@ -2,18 +2,27 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>A FITNESS</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
-        body {
+        html, body {
             font-family: 'Cairo', sans-serif;
             background-color: #000000;
             color: #ffffff;
             margin: 0;
             padding: 0;
+            height: 100dvh;
+            overflow: hidden;
+        }
+        .fade-in {
+            animation: fadeIn 0.3s ease-out forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
         }
         .neon-btn {
             background-color: #ccff00;
@@ -28,157 +37,317 @@
             background-color: rgba(204, 255, 0, 0.06);
             color: #ccff00;
             border: 1.5px solid #ccff00;
+            box-shadow: 0 0 15px rgba(204, 255, 0, 0.15);
         }
         .neon-outline-btn:hover {
             background-color: #ccff00;
             color: #000000;
+            box-shadow: 0 0 25px rgba(204, 255, 0, 0.55);
         }
         .neon-text {
             color: #ccff00;
             text-shadow: 0 0 12px rgba(204, 255, 0, 0.35);
         }
+        .custom-scroll::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scroll::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scroll::-webkit-scrollbar-thumb {
+            background: #27272a;
+            border-radius: 10px;
+        }
         .custom-input {
             background-color: #09090b;
             border: 1px solid #27272a;
             color: #ffffff;
+            transition: all 0.2s ease;
         }
         .custom-input:focus {
             outline: none;
             border-color: #ccff00;
+            box-shadow: 0 0 12px rgba(204, 255, 0, 0.2);
         }
     </style>
 </head>
-<body class="min-h-screen flex flex-col justify-between bg-black text-white">
+<body class="h-[100dvh] flex flex-col justify-between bg-black text-white selection:bg-[#ccff00] selection:text-black overflow-hidden relative">
 
-    <!-- الشريط العلوي -->
-    <header class="w-full px-5 pt-4 pb-2 flex items-center justify-between z-30">
-        <button onclick="toggleMenu()" class="p-2.5 rounded-xl border border-zinc-800 bg-zinc-950 text-[#ccff00] cursor-pointer">
-            <i class="fa-solid fa-bars text-lg"></i>
+    <!-- الشريط العلوي الثابت في كل الصفحات -->
+    <header class="w-full px-5 pt-4 pb-2 flex items-center justify-between z-30 shrink-0">
+        <button onclick="toggleMenu()" aria-label="القائمة" class="p-2.5 rounded-xl border border-zinc-800 bg-zinc-950 hover:border-[#ccff00] transition group cursor-pointer">
+            <div class="w-6 flex flex-col gap-1.5">
+                <span class="block h-0.5 w-full bg-[#ccff00] rounded-full transition-all group-hover:w-4"></span>
+                <span class="block h-0.5 w-full bg-white group-hover:bg-[#ccff00] rounded-full transition-all"></span>
+                <span class="block h-0.5 w-4 bg-[#ccff00] rounded-full transition-all group-hover:w-full"></span>
+            </div>
         </button>
-        <span onclick="showSection('home-section')" class="text-xs font-black tracking-widest text-zinc-500 uppercase cursor-pointer">
+
+        <span onclick="navigateTo('home-section')" class="text-xs font-black tracking-widest text-zinc-500 uppercase cursor-pointer">
             A <span class="text-[#ccff00]">FITNESS</span>
         </span>
     </header>
 
+    <!-- خلفية مظللة عند فتح القائمة الجانبية -->
+    <div id="menu-backdrop" onclick="toggleMenu()" class="fixed inset-0 bg-black/75 backdrop-blur-xs z-40 hidden transition-opacity"></div>
+
     <!-- القائمة الجانبية -->
-    <div id="side-menu" class="fixed inset-y-0 right-0 w-64 bg-zinc-950 border-l border-zinc-800 z-50 hidden flex-col p-6 shadow-2xl">
-        <div class="flex items-center justify-between pb-4 border-b border-zinc-800 mb-4">
-            <span class="text-lg font-black">A <span class="neon-text">FITNESS</span></span>
-            <button onclick="toggleMenu()" class="text-zinc-400 hover:text-white text-lg">✕</button>
-        </div>
-        <div class="flex flex-col gap-3">
-            <button onclick="showSection('home-section'); toggleMenu();" class="text-right py-2 px-3 rounded-lg hover:bg-zinc-900 font-bold">الرئيسية</button>
-            <button onclick="showSection('training-section'); toggleMenu();" class="text-right py-2 px-3 rounded-lg hover:bg-zinc-900 font-bold">التدريب أونلاين</button>
-            <button onclick="showSection('about-section'); toggleMenu();" class="text-right py-2 px-3 rounded-lg hover:bg-zinc-900 font-bold">عني</button>
-        </div>
-    </div>
-
-    <!-- المحتوى الرئيسي -->
-    <main class="flex-grow flex flex-col items-center justify-center px-5 py-6 text-center">
-
-        <!-- 1. الرئيسية -->
-        <section id="home-section" class="w-full max-w-sm flex flex-col items-center">
-            <div class="mb-4">
-                <img src="logo.png" alt="A FITNESS" onerror="this.onerror=null; this.src='https://via.placeholder.com/150/000000/ccff00?text=A+FITNESS';" class="w-32 h-32 mx-auto object-contain rounded-2xl">
-            </div>
-            <h1 class="text-3xl font-black uppercase mb-1">A <span class="neon-text">FITNESS</span></h1>
-            <p class="text-zinc-400 text-sm mb-6 font-semibold">ابـدأ الـتـغـيـيـر الـحـقـيـقـي الآن</p>
-            <div class="w-full flex gap-3">
-                <button onclick="showSection('next-section')" class="flex-1 neon-btn font-black py-3 rounded-full cursor-pointer">ابدأ الآن</button>
-                <button onclick="showSection('training-section')" class="flex-1 neon-outline-btn font-black py-3 rounded-full cursor-pointer">التدريب أونلاين</button>
-            </div>
-        </section>
-
-        <!-- 2. باقة التدريب أونلاين -->
-        <section id="training-section" class="w-full max-w-md hidden flex flex-col text-right bg-zinc-900/50 border border-zinc-800 p-6 rounded-3xl">
-            <div class="text-center border-b border-zinc-800 pb-4 mb-4">
-                <span class="bg-[#ccff00]/15 text-[#ccff00] text-xs font-bold px-3 py-1 rounded-full">باقة التدريب</span>
-                <h2 class="text-2xl font-black mt-2">تفاصيل <span class="neon-text">البرنامج</span></h2>
-                <div class="mt-3 inline-block bg-black border border-[#ccff00]/40 px-4 py-1 rounded-xl">
-                    <span class="text-2xl font-black neon-text">12</span> <span class="text-xs">دولار</span>
-                </div>
-            </div>
-            <div class="flex flex-col gap-3 text-xs sm:text-sm mb-6">
-                <div class="bg-black/40 p-3 rounded-xl border border-zinc-800">✅ جدول مخصص يتم بناؤه استنادًا إلى هدفك، “داخل نطاق تحسين شكل الجسم”، ذكرًا أو أنثى، مع التعديل عند الحاجة.</div>
-                <div class="bg-black/40 p-3 rounded-xl border border-zinc-800">✅ جدول تغذية يشمل حساب السعرات و الماكروز.</div>
-                <div class="bg-black/40 p-3 rounded-xl border border-zinc-800">✅ تحديث الخطة كل أسبوعين، والرد على الاستفسارات خلال 24 ساعة (ما عدا السبت).</div>
-            </div>
-            <div class="flex gap-2">
-                <button onclick="showSection('register-section')" class="flex-1 neon-btn font-black py-3 rounded-xl cursor-pointer">سجل الآن</button>
-                <button onclick="showSection('home-section')" class="bg-zinc-800 px-4 py-3 rounded-xl text-xs font-bold cursor-pointer">رجوع</button>
-            </div>
-        </section>
-
-        <!-- 3. صفحة التسجيل والواتساب -->
-        <section id="register-section" class="w-full max-w-md hidden flex flex-col text-right bg-zinc-950 border border-[#ccff00]/40 p-6 rounded-3xl">
-            <div class="flex justify-between items-center border-b border-zinc-800 pb-3 mb-4">
-                <h2 class="text-xl font-black">بيانات <span class="neon-text">الاشتراك</span></h2>
-                <button onclick="showSection('training-section')" class="text-xs text-zinc-400 hover:text-white">← رجوع</button>
-            </div>
-            <form onsubmit="sendToWhatsApp(event)" class="flex flex-col gap-3">
-                <div>
-                    <label class="block text-xs font-bold mb-1">الاسم الكامل *</label>
-                    <input type="text" id="full-name" required class="w-full custom-input rounded-xl px-3 py-2 text-sm">
-                </div>
-                <div>
-                    <label class="block text-xs font-bold mb-1">البريد الإلكتروني *</label>
-                    <input type="email" id="user-email" required class="w-full custom-input rounded-xl px-3 py-2 text-sm" dir="ltr">
-                </div>
-                <div>
-                    <label class="block text-xs font-bold mb-1">الدولة *</label>
-                    <select id="country-select" required class="w-full custom-input rounded-xl px-3 py-2 text-sm"></select>
-                </div>
-                <div>
-                    <label class="block text-xs font-bold mb-1">رقم الجوال (واتساب) *</label>
-                    <div class="flex gap-2" dir="ltr">
-                        <select id="phone-code" class="w-28 custom-input rounded-xl px-2 py-2 text-xs font-bold"></select>
-                        <input type="tel" id="phone-number" required placeholder="79XXXXXXX" class="flex-1 custom-input rounded-xl px-3 py-2 text-sm">
-                    </div>
-                </div>
-                <label class="flex items-center gap-2 text-xs font-bold mt-1 cursor-pointer">
-                    <input type="checkbox" id="terms" required class="accent-[#ccff00]"> أوافق على الشروط والأحكام وسياسة الاشتراك
-                </label>
-                <button type="submit" class="w-full neon-btn font-black py-3 rounded-xl mt-2 cursor-pointer">
-                    <i class="fa-brands fa-whatsapp text-lg ml-1"></i> إرسال الطلب عبر واتساب
+    <aside id="side-menu" class="fixed top-0 right-0 h-full w-64 bg-zinc-950 border-l border-[#ccff00]/40 z-50 transform translate-x-full transition-transform duration-300 ease-out flex flex-col justify-between p-6 shadow-[-10px_0_30px_rgba(204,255,0,0.1)]">
+        <div>
+            <div class="flex items-center justify-between pb-5 border-b border-zinc-800">
+                <span class="text-lg font-black uppercase">A <span class="neon-text">FITNESS</span></span>
+                <button onclick="toggleMenu()" class="w-8 h-8 rounded-lg border border-zinc-800 text-[#ccff00] hover:bg-[#ccff00] hover:text-black flex items-center justify-center text-sm font-bold transition cursor-pointer">
+                    ✕
                 </button>
-                <div class="mt-2 bg-[#ccff00]/10 border-r-4 border-[#ccff00] p-2.5 rounded-xl text-[11px] font-bold text-zinc-200">
-                    عند التواصل معك سيتم أخذ جميع المعلومات عن وضعك الحالي واهدافك المستقبلية، <span class="text-[#ccff00]">مبلغ الاشتراك غير مسترد ولا يمكن تحويله لشخص أخر</span>.
-                </div>
-            </form>
-        </section>
+            </div>
 
-        <!-- 4. صفحة الخطوة الثانية العادية -->
-        <section id="next-section" class="w-full max-w-md hidden flex flex-col items-center bg-zinc-900/50 p-6 rounded-3xl">
-            <h2 class="text-2xl font-black mb-2">الخطوة <span class="neon-text">الثانية</span></h2>
-            <p class="text-zinc-400 text-sm mb-4">محتوى إضافي جاهز للتخصيص.</p>
-            <button onclick="showSection('home-section')" class="bg-zinc-800 text-xs font-bold px-5 py-2 rounded-full">رجوع</button>
-        </section>
+            <nav class="flex flex-col gap-3 mt-6">
+                <button onclick="navigateTo('home-section')" class="w-full text-right py-3 px-4 rounded-xl bg-zinc-900/70 border border-zinc-800 hover:border-[#ccff00] hover:text-[#ccff00] text-base font-extrabold transition cursor-pointer flex items-center justify-between">
+                    <span>الرئيسية</span>
+                    <span class="text-[#ccff00] text-xs">●</span>
+                </button>
+                <button onclick="navigateTo('training-package-section')" class="w-full text-right py-3 px-4 rounded-xl bg-zinc-900/70 border border-zinc-800 hover:border-[#ccff00] hover:text-[#ccff00] text-base font-extrabold transition cursor-pointer flex items-center justify-between">
+                    <span>التدريب أونلاين</span>
+                    <i class="fa-solid fa-dumbbell text-[#ccff00] text-xs"></i>
+                </button>
+                <button onclick="navigateTo('about-section')" class="w-full text-right py-3 px-4 rounded-xl bg-[#ccff00]/10 border border-[#ccff00]/60 text-[#ccff00] hover:bg-[#ccff00] hover:text-black text-base font-black transition cursor-pointer flex items-center justify-between">
+                    <span>عني</span>
+                    <i class="fa-solid fa-user text-xs"></i>
+                </button>
+            </nav>
+        </div>
 
-        <!-- 5. صفحة عني -->
-        <section id="about-section" class="w-full max-w-md hidden flex flex-col items-center bg-zinc-900/50 p-6 rounded-3xl">
-            <h2 class="text-2xl font-black mb-2">عن <span class="neon-text">المدرب</span></h2>
-            <p class="text-zinc-300 text-sm mb-4">مدرب لياقة بدنية وتأهيل رياضي، هدفي مساعدتك في بناء جسم قوي ومتناسق.</p>
-            <button onclick="showSection('home-section')" class="bg-zinc-800 text-xs font-bold px-5 py-2 rounded-full">رجوع</button>
-        </section>
+        <div class="text-center text-[11px] text-zinc-500 font-semibold border-t border-zinc-900 pt-4">
+            A FITNESS &bull; القائمة
+        </div>
+    </aside>
 
+    <!-- القسم الأول: الرئيسية -->
+    <main id="home-section" class="flex-grow flex flex-col items-center justify-center px-5 text-center">
+        <!-- الشعار -->
+        <div class="mb-4 flex items-center justify-center">
+            <img id="brand-logo" 
+                 src="logo.png" 
+                 alt="A FITNESS" 
+                 onerror="handleImageError(this)"
+                 class="w-32 h-32 md:w-36 md:h-36 mx-auto object-contain rounded-2xl">
+            
+            <div id="fallback-logo" class="hidden w-28 h-28 rounded-3xl border-2 border-[#ccff00] bg-[#ccff00]/10 flex items-center justify-center shadow-[0_0_25px_rgba(204,255,0,0.2)]">
+                <span class="text-6xl font-black neon-text">A</span>
+            </div>
+        </div>
+
+        <!-- العنوان الرئيسي -->
+        <h1 class="text-3xl md:text-4xl font-black tracking-wider mb-1.5 uppercase">
+            A <span class="neon-text">FITNESS</span>
+        </h1>
+        
+        <p class="text-zinc-400 text-sm md:text-base max-w-xs mb-6 font-semibold">
+            ابـدأ الـتـغـيـيـر الـحـقـيـقـي الآن
+        </p>
+
+        <!-- أزرار الصفحة الرئيسية: ابدأ الآن + التدريب أونلاين -->
+        <div class="w-full max-w-sm flex items-center justify-center gap-3">
+            <button onclick="navigateTo('next-section')" class="flex-1 neon-btn active:scale-95 font-black text-base sm:text-lg py-3.5 px-4 rounded-full transition-all duration-200 cursor-pointer whitespace-nowrap">
+                ابدأ الآن
+            </button>
+            <button onclick="navigateTo('training-package-section')" class="flex-1 neon-outline-btn active:scale-95 font-black text-base sm:text-lg py-3.5 px-4 rounded-full transition-all duration-200 cursor-pointer whitespace-nowrap">
+                التدريب أونلاين
+            </button>
+        </div>
     </main>
 
-    <!-- التذييل السفلي -->
-    <footer class="w-full">
-        <div class="w-full bg-[#ccff00] py-2 text-center text-black">
-            <span class="text-xs font-black block mb-1">وسائل التواصل الاجتماعي</span>
-            <div class="flex justify-center gap-3">
-                <a href="https://www.instagram.com/2yhamm/" target="_blank" class="w-7 h-7 bg-black text-[#ccff00] rounded-lg flex items-center justify-center text-sm"><i class="fa-brands fa-instagram"></i></a>
-                <a href="https://www.snapchat.com/add/eldwaymeh" target="_blank" class="w-7 h-7 bg-black text-[#ccff00] rounded-lg flex items-center justify-center text-sm"><i class="fa-brands fa-snapchat"></i></a>
+    <!-- صفحة باقة التدريب (تفتح عند الضغط على التدريب أونلاين) -->
+    <section id="training-package-section" class="hidden flex-grow flex flex-col items-center justify-center px-5 py-3 fade-in overflow-y-auto custom-scroll">
+        <div class="w-full max-w-md bg-gradient-to-b from-zinc-900 to-zinc-950 border-2 border-[#ccff00]/70 rounded-3xl p-5 sm:p-6 shadow-[0_0_35px_rgba(204,255,0,0.14)] relative overflow-hidden my-auto">
+            
+            <div class="absolute -top-12 -left-12 w-32 h-32 bg-[#ccff00]/15 rounded-full blur-2xl pointer-events-none"></div>
+
+            <div class="text-center border-b border-zinc-800/90 pb-4 mb-4">
+                <span class="inline-block bg-[#ccff00]/15 text-[#ccff00] border border-[#ccff00]/40 text-[11px] font-black px-3 py-0.5 rounded-full mb-2 tracking-wide">
+                    ONLINE COACHING
+                </span>
+                <h2 class="text-2xl sm:text-3xl font-black text-white tracking-wide mb-2">
+                    باقة <span class="neon-text">التدريب</span>
+                </h2>
+                
+                <!-- سعر الباقة 12 دولار -->
+                <div class="inline-flex items-baseline justify-center gap-1.5 bg-black/80 border border-[#ccff00]/50 px-5 py-1.5 rounded-2xl shadow-[0_0_15px_rgba(204,255,0,0.15)]">
+                    <span class="text-3xl sm:text-4xl font-black neon-text">12</span>
+                    <span class="text-sm font-extrabold text-white">دولار</span>
+                </div>
+            </div>
+
+            <!-- مميزات الباقة -->
+            <div class="flex flex-col gap-2.5 text-right mb-5">
+                <div class="flex items-start gap-3 bg-black/60 border border-zinc-800/90 hover:border-[#ccff00]/50 transition p-3 rounded-2xl">
+                    <div class="w-8 h-8 rounded-xl bg-[#ccff00] text-black flex items-center justify-center shrink-0 mt-0.5 shadow-[0_0_12px_rgba(204,255,0,0.4)]">
+                        <i class="fa-solid fa-dumbbell text-sm"></i>
+                    </div>
+                    <p class="text-zinc-200 text-xs sm:text-sm font-bold leading-relaxed">
+                        جدول مخصص يتم بناؤه استنادًا إلى هدفك، “داخل نطاق تحسين شكل الجسم”، سواء كان المشترك ذكرًا أو أنثى، مع التعديل عند الحاجة.
+                    </p>
+                </div>
+
+                <div class="flex items-start gap-3 bg-black/60 border border-zinc-800/90 hover:border-[#ccff00]/50 transition p-3 rounded-2xl">
+                    <div class="w-8 h-8 rounded-xl bg-[#ccff00] text-black flex items-center justify-center shrink-0 mt-0.5 shadow-[0_0_12px_rgba(204,255,0,0.4)]">
+                        <i class="fa-solid fa-fire-flame-curved text-sm"></i>
+                    </div>
+                    <p class="text-zinc-200 text-xs sm:text-sm font-bold leading-relaxed">
+                        جدول تغذية يشمل حساب السعرات و الماكروز
+                    </p>
+                </div>
+
+                <div class="flex items-start gap-3 bg-black/60 border border-zinc-800/90 hover:border-[#ccff00]/50 transition p-3 rounded-2xl">
+                    <div class="w-8 h-8 rounded-xl bg-[#ccff00] text-black flex items-center justify-center shrink-0 mt-0.5 shadow-[0_0_12px_rgba(204,255,0,0.4)]">
+                        <i class="fa-solid fa-arrows-rotate text-sm"></i>
+                    </div>
+                    <p class="text-zinc-200 text-xs sm:text-sm font-bold leading-relaxed">
+                        تحديث الخطة كل أسبوعين بناءً على المعطيات، مع الرد على جميع الأسئلة والاستفسارات خلال مدة لا تتجاوز 24 ساعة، ما عدا يوم السبت (الإجازة الأسبوعية)
+                    </p>
+                </div>
+            </div>
+
+            <!-- زر سجل الآن بلمسات جميلة -->
+            <div class="flex items-center gap-2.5">
+                <button onclick="navigateTo('register-section')" class="flex-1 neon-btn active:scale-95 font-black text-base sm:text-lg py-3 px-5 rounded-2xl transition-all duration-200 cursor-pointer flex items-center justify-center gap-2">
+                    <span>سجل الآن</span>
+                    <i class="fa-solid fa-arrow-left text-sm"></i>
+                </button>
+                <button onclick="navigateTo('home-section')" class="bg-zinc-900 hover:bg-zinc-800 text-zinc-300 hover:text-[#ccff00] text-xs font-extrabold py-3.5 px-4 rounded-2xl transition border border-zinc-800 hover:border-[#ccff00] cursor-pointer">
+                    رجوع
+                </button>
             </div>
         </div>
-        <div class="w-full bg-white text-black py-1 text-center text-[10px] font-black">
+    </section>
+
+    <!-- صفحة بيانات الاشتراك وإرسال الطلب للواتساب -->
+    <section id="register-section" class="hidden flex-grow flex flex-col items-center justify-start px-5 py-3 fade-in overflow-y-auto custom-scroll">
+        <div class="w-full max-w-md bg-zinc-950 border border-[#ccff00]/50 rounded-3xl p-5 sm:p-6 shadow-[0_0_30px_rgba(204,255,0,0.1)] my-auto">
+            
+            <div class="flex items-center justify-between border-b border-zinc-800 pb-3 mb-4">
+                <div>
+                    <h2 class="text-xl sm:text-2xl font-black text-white">بيانات <span class="neon-text">الاشتراك</span></h2>
+                    <p class="text-[11px] text-zinc-400 font-semibold">باقة التدريب أونلاين - 12 دولار</p>
+                </div>
+                <button onclick="navigateTo('training-package-section')" class="text-zinc-400 hover:text-[#ccff00] text-xs font-bold border border-zinc-800 px-3 py-1.5 rounded-xl transition cursor-pointer">
+                    → رجوع
+                </button>
+            </div>
+
+            <form id="subscription-form" onsubmit="sendToWhatsApp(event)" class="flex flex-col gap-3 text-right">
+                
+                <!-- الاسم الكامل -->
+                <div>
+                    <label class="block text-xs font-extrabold text-zinc-300 mb-1">الاسم الكامل <span class="text-[#ccff00]">*</span></label>
+                    <input type="text" id="full-name" required placeholder="أدخل اسمك الكامل" class="w-full custom-input rounded-xl px-3.5 py-2.5 text-sm font-semibold">
+                </div>
+
+                <!-- الإيميل -->
+                <div>
+                    <label class="block text-xs font-extrabold text-zinc-300 mb-1">البريد الإلكتروني (الإيميل) <span class="text-[#ccff00]">*</span></label>
+                    <input type="email" id="user-email" required placeholder="example@email.com" dir="ltr" class="w-full custom-input rounded-xl px-3.5 py-2.5 text-sm font-semibold text-right">
+                </div>
+
+                <!-- الدولة (جميع البلدان) -->
+                <div>
+                    <label class="block text-xs font-extrabold text-zinc-300 mb-1">الدولة <span class="text-[#ccff00]">*</span></label>
+                    <select id="country-select" required class="w-full custom-input rounded-xl px-3.5 py-2.5 text-sm font-semibold cursor-pointer">
+                        <!-- تُعبأ تلقائياً بالسكربت -->
+                    </select>
+                </div>
+
+                <!-- رقم الجوال + جميع رموز الدول -->
+                <div>
+                    <label class="block text-xs font-extrabold text-zinc-300 mb-1">رقم الجوال (واتساب) <span class="text-[#ccff00]">*</span></label>
+                    <div class="flex gap-2" dir="ltr">
+                        <select id="phone-code" required class="w-28 sm:w-32 custom-input rounded-xl px-2 py-2.5 text-xs sm:text-sm font-bold cursor-pointer">
+                            <!-- تُعبأ تلقائياً بالسكربت -->
+                        </select>
+                        <input type="tel" id="phone-number" required placeholder="79XXXXXXX" class="flex-1 custom-input rounded-xl px-3.5 py-2.5 text-sm font-semibold">
+                    </div>
+                </div>
+
+                <!-- الموافقة على الشروط والأحكام -->
+                <label class="flex items-center gap-2.5 mt-1 cursor-pointer select-none bg-zinc-900/70 p-2.5 rounded-xl border border-zinc-800/80">
+                    <input type="checkbox" id="terms-agree" required class="w-4 h-4 accent-[#ccff00] rounded cursor-pointer shrink-0">
+                    <span class="text-xs font-bold text-zinc-300">أوافق على الشروط والأحكام وسياسة الاشتراك</span>
+                </label>
+
+                <!-- زر إرسال الطلب -->
+                <button type="submit" class="w-full neon-btn active:scale-95 font-black text-base py-3 px-6 rounded-xl transition-all duration-200 cursor-pointer flex items-center justify-center gap-2 mt-1">
+                    <i class="fa-brands fa-whatsapp text-xl"></i>
+                    <span>إرسال الطلب عبر الواتساب</span>
+                </button>
+
+                <!-- ملاحظة الشروط بتصميم قوي -->
+                <div class="mt-2 bg-[#ccff00]/10 border-r-4 border-[#ccff00] p-3 rounded-xl text-right shadow-[0_0_15px_rgba(204,255,0,0.08)]">
+                    <p class="text-[11px] sm:text-xs font-extrabold text-zinc-200 leading-relaxed">
+                        <i class="fa-solid fa-circle-exclamation text-[#ccff00] ml-1"></i>
+                        عند التواصل معك سيتم أخذ جميع المعلومات عن وضعك الحالي واهدافك المستقبلية، <span class="text-[#ccff00] underline">مبلغ الاشتراك غير مسترد ولا يمكن تحويله لشخص أخر</span>.
+                    </p>
+                </div>
+
+            </form>
+        </div>
+    </section>
+
+    <!-- القسم الثاني: الصفحة التي تفتح عند الضغط على "ابدأ الآن" -->
+    <section id="next-section" class="hidden flex-grow flex flex-col items-center justify-center px-6 text-center fade-in overflow-y-auto">
+        <div class="w-full max-w-md bg-zinc-950 border border-zinc-800 p-7 rounded-3xl shadow-2xl">
+            <h2 class="text-2xl font-black mb-3 text-white">الخطوة <span class="neon-text">الثانية</span></h2>
+            <p class="text-zinc-300 text-sm mb-6 leading-relaxed">
+                أهلاً بك! نحن جاهزون لإضافة تفاصيلك أو الأسئلة الخاصة بك هنا. أخبرني ماذا تريد أن نضع في هذه الخانة لنقوم ببرمجتها فوراً.
+            </p>
+            <button onclick="navigateTo('home-section')" class="bg-zinc-900 hover:bg-zinc-800 text-zinc-300 hover:text-[#ccff00] text-xs font-bold py-2.5 px-6 rounded-full transition border border-zinc-700 hover:border-[#ccff00] cursor-pointer">
+                العودة للخلف
+            </button>
+        </div>
+    </section>
+
+    <!-- القسم الثالث: صفحة "عني" -->
+    <section id="about-section" class="hidden flex-grow flex flex-col items-center justify-center px-6 text-center fade-in overflow-y-auto">
+        <div class="w-full max-w-md bg-zinc-950 border border-[#ccff00]/30 p-7 rounded-3xl shadow-[0_0_25px_rgba(204,255,0,0.08)]">
+            <h2 class="text-2xl font-black mb-3 text-white">نبذة <span class="neon-text">عني</span></h2>
+            <p class="text-zinc-300 text-sm mb-6 leading-relaxed">
+                مدرب لياقة بدنية وتأهيل رياضي، هدفي مساعدتك في بناء جسم قوي ومتناسق بأسلوب علمي ومستدام بعيداً عن التعقيد.
+            </p>
+            <button onclick="navigateTo('home-section')" class="neon-btn px-7 py-2.5 rounded-full text-xs font-black transition cursor-pointer">
+                العودة للرئيسية
+            </button>
+        </div>
+    </section>
+
+    <!-- التذييل السفلي الثابت في كل الصفحات -->
+    <footer class="w-full shrink-0 z-20">
+        <!-- خانة وسائل التواصل الاجتماعي الفسفورية -->
+        <div class="w-full bg-[#ccff00] py-2.5 px-4 flex flex-col items-center justify-center gap-1.5">
+            <span class="text-[#141824] text-xs font-black tracking-wide">
+                وسائل التواصل الاجتماعي
+            </span>
+            
+            <div class="flex items-center justify-center gap-3">
+                <a href="https://www.instagram.com/2yhamm/" target="_blank" rel="noopener noreferrer" aria-label="Instagram"
+                   class="w-8 h-8 bg-[#141824] text-[#ccff00] rounded-lg flex items-center justify-center text-base hover:scale-110 active:scale-95 transition-transform">
+                    <i class="fa-brands fa-instagram"></i>
+                </a>
+
+                <a href="https://www.snapchat.com/add/eldwaymeh" target="_blank" rel="noopener noreferrer" aria-label="Snapchat"
+                   class="w-8 h-8 bg-[#141824] text-[#ccff00] rounded-lg flex items-center justify-center text-base hover:scale-110 active:scale-95 transition-transform">
+                    <i class="fa-brands fa-snapchat"></i>
+                </a>
+            </div>
+        </div>
+
+        <!-- خانة حقوق النشر البيضاء -->
+        <div class="w-full bg-white text-black py-1.5 px-4 text-center text-[11px] font-extrabold">
             جميع الحقوق محفوظة &copy; 2026 A FITNESS
         </div>
     </footer>
 
     <script>
-        const countries = [
+        // قائمة الدول ورموز الاتصال
+        const countriesData = [
             { name: "الأردن", code: "+962", iso: "JO" },
             { name: "السعودية", code: "+966", iso: "SA" },
             { name: "الإمارات", code: "+971", iso: "AE" },
@@ -188,41 +357,114 @@
             { name: "البحرين", code: "+973", iso: "BH" },
             { name: "عُمان", code: "+968", iso: "OM" },
             { name: "مصر", code: "+20", iso: "EG" },
-            { name: "العراق", code: "+964", iso: "IQ" }
+            { name: "العراق", code: "+964", iso: "IQ" },
+            { name: "لبنان", code: "+961", iso: "LB" },
+            { name: "سوريا", code: "+963", iso: "SY" },
+            { name: "اليمن", code: "+967", iso: "YE" },
+            { name: "المغرب", code: "+212", iso: "MA" },
+            { name: "الجزائر", code: "+213", iso: "DZ" },
+            { name: "تونس", code: "+216", iso: "TN" },
+            { name: "ليبيا", code: "+218", iso: "LY" },
+            { name: "السودان", code: "+249", iso: "SD" },
+            { name: "تركيا", code: "+90", iso: "TR" },
+            { name: "الولايات المتحدة", code: "+1", iso: "US" },
+            { name: "كندا", code: "+1", iso: "CA" },
+            { name: "المملكة المتحدة", code: "+44", iso: "GB" },
+            { name: "ألمانيا", code: "+49", iso: "DE" },
+            { name: "فرنسا", code: "+33", iso: "FR" }
         ];
 
         window.addEventListener('DOMContentLoaded', () => {
             const countrySelect = document.getElementById('country-select');
             const phoneCodeSelect = document.getElementById('phone-code');
-            countries.forEach(c => {
-                countrySelect.innerHTML += `<option value="${c.name}">${c.name}</option>`;
-                phoneCodeSelect.innerHTML += `<option value="${c.code}">${c.iso} (${c.code})</option>`;
-            });
+
+            if (countrySelect && phoneCodeSelect) {
+                countriesData.forEach(c => {
+                    const optCountry = document.createElement('option');
+                    optCountry.value = c.name;
+                    optCountry.textContent = c.name;
+                    countrySelect.appendChild(optCountry);
+
+                    const optCode = document.createElement('option');
+                    optCode.value = c.code;
+                    optCode.textContent = `${c.iso} (${c.code})`;
+                    phoneCodeSelect.appendChild(optCode);
+                });
+
+                countrySelect.addEventListener('change', (e) => {
+                    const selected = countriesData.find(c => c.name === e.target.value);
+                    if (selected) {
+                        phoneCodeSelect.value = selected.code;
+                    }
+                });
+            }
         });
 
-        function showSection(sectionId) {
-            ['home-section', 'training-section', 'register-section', 'next-section', 'about-section'].forEach(id => {
-                document.getElementById(id).classList.add('hidden');
-            });
-            document.getElementById(sectionId).classList.remove('hidden');
-        }
-
-        function toggleMenu() {
-            const menu = document.getElementById('side-menu');
-            menu.classList.toggle('hidden');
-            menu.classList.toggle('flex');
-        }
-
+        // إرسال الطلب إلى الواتساب (رقمك: 0799954369 -> 962799954369)
         function sendToWhatsApp(event) {
             event.preventDefault();
-            const name = document.getElementById('full-name').value;
-            const email = document.getElementById('user-email').value;
+            const fullName = document.getElementById('full-name').value.trim();
+            const email = document.getElementById('user-email').value.trim();
             const country = document.getElementById('country-select').value;
-            const code = document.getElementById('phone-code').value;
-            const phone = document.getElementById('phone-number').value;
+            const phoneCode = document.getElementById('phone-code').value;
+            const phoneNumber = document.getElementById('phone-number').value.trim();
 
-            const msg = `مرحباً كابتن أيهم، أرغب بالاشتراك في *باقة التدريب أونلاين (12 دولار)* 💪%0A%0A*بيانات المشترك:*%0A• الاسم: ${name}%0A• الإيميل: ${email}%0A• الدولة: ${country}%0A• الجوال: ${code}${phone}%0A• الموافقة: تم الموافقة على الشروط والأحكام.`;
-            window.open(`https://wa.me/962799954369?text=${msg}`, '_blank');
+            const trainerWhatsApp = "962799954369";
+
+            const message = 
+`مرحباً كابتن أيهم، أرغب بالاشتراك في *باقة التدريب أونلاين (12 دولار)* 💪
+
+*بيانات المشترك:*
+• *الاسم الكامل:* ${fullName}
+• *الإيميل:* ${email}
+• *الدولة:* ${country}
+• *رقم الجوال:* ${phoneCode}${phoneNumber}
+• *الموافقة:* تم الاطلاع والموافقة على الشروط والأحكام.`;
+
+            const whatsappUrl = `https://wa.me/${trainerWhatsApp}?text=${encodeURIComponent(message)}`;
+            window.open(whatsappUrl, '_blank');
+        }
+
+        let attempt = 0;
+        const possibleNames = ['logo.jpg', 'logo.jpeg', 'logo.webp', 'LOGO.PNG', 'LOGO.JPG', 'IMG_8608.jpeg', 'IMG_8608.jpg', 'IMG_8608.png'];
+        
+        function handleImageError(img) {
+            if (attempt < possibleNames.length) {
+                img.src = possibleNames[attempt];
+                attempt++;
+            } else {
+                img.classList.add('hidden');
+                document.getElementById('fallback-logo').classList.remove('hidden');
+            }
+        }
+
+        let isMenuOpen = false;
+        function toggleMenu() {
+            const menu = document.getElementById('side-menu');
+            const backdrop = document.getElementById('menu-backdrop');
+            isMenuOpen = !isMenuOpen;
+            
+            if (isMenuOpen) {
+                menu.classList.remove('translate-x-full');
+                backdrop.classList.remove('hidden');
+            } else {
+                menu.classList.add('translate-x-full');
+                backdrop.classList.add('hidden');
+            }
+        }
+
+        function navigateTo(sectionId) {
+            ['home-section', 'training-package-section', 'register-section', 'next-section', 'about-section'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.classList.add('hidden');
+            });
+            
+            const target = document.getElementById(sectionId);
+            if (target) target.classList.remove('hidden');
+            
+            if (isMenuOpen) {
+                toggleMenu();
+            }
         }
     </script>
 </body>
