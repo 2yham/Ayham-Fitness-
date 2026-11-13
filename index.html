@@ -33,9 +33,31 @@
             background-color: #d9ff33;
             box-shadow: 0 0 30px rgba(204, 255, 0, 0.75);
         }
+        .neon-outline-btn {
+            background-color: rgba(204, 255, 0, 0.06);
+            color: #ccff00;
+            border: 1.5px solid #ccff00;
+            box-shadow: 0 0 15px rgba(204, 255, 0, 0.15);
+        }
+        .neon-outline-btn:hover {
+            background-color: #ccff00;
+            color: #000000;
+            box-shadow: 0 0 25px rgba(204, 255, 0, 0.55);
+        }
         .neon-text {
             color: #ccff00;
             text-shadow: 0 0 12px rgba(204, 255, 0, 0.35);
+        }
+        /* تخصيص شريط التمرير الداخلي للصفحات الفرعية */
+        .custom-scroll::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scroll::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scroll::-webkit-scrollbar-thumb {
+            background: #27272a;
+            border-radius: 10px;
         }
     </style>
 </head>
@@ -59,7 +81,7 @@
     <!-- خلفية مظللة عند فتح القائمة الجانبية -->
     <div id="menu-backdrop" onclick="toggleMenu()" class="fixed inset-0 bg-black/75 backdrop-blur-xs z-40 hidden transition-opacity"></div>
 
-    <!-- القائمة الجانبية (تفتح على الجنب بلمسات فسفورية) -->
+    <!-- القائمة الجانبية -->
     <aside id="side-menu" class="fixed top-0 right-0 h-full w-64 bg-zinc-950 border-l border-[#ccff00]/40 z-50 transform translate-x-full transition-transform duration-300 ease-out flex flex-col justify-between p-6 shadow-[-10px_0_30px_rgba(204,255,0,0.1)]">
         <div>
             <div class="flex items-center justify-between pb-5 border-b border-zinc-800">
@@ -74,6 +96,10 @@
                     <span>الرئيسية</span>
                     <span class="text-[#ccff00] text-xs">●</span>
                 </button>
+                <button onclick="navigateTo('training-package-section')" class="w-full text-right py-3 px-4 rounded-xl bg-zinc-900/70 border border-zinc-800 hover:border-[#ccff00] hover:text-[#ccff00] text-base font-extrabold transition cursor-pointer flex items-center justify-between">
+                    <span>التدريب أونلاين</span>
+                    <i class="fa-solid fa-dumbbell text-[#ccff00] text-xs"></i>
+                </button>
                 <button onclick="navigateTo('about-section')" class="w-full text-right py-3 px-4 rounded-xl bg-[#ccff00]/10 border border-[#ccff00]/60 text-[#ccff00] hover:bg-[#ccff00] hover:text-black text-base font-black transition cursor-pointer flex items-center justify-between">
                     <span>عني</span>
                     <i class="fa-solid fa-user text-xs"></i>
@@ -86,8 +112,8 @@
         </div>
     </aside>
 
-    <!-- القسم الأول: الرئيسية (كما هي تماماً بدون أي تغيير في التصميم) -->
-    <main id="home-section" class="flex-grow flex flex-col items-center justify-center px-6 text-center">
+    <!-- القسم الأول: الرئيسية -->
+    <main id="home-section" class="flex-grow flex flex-col items-center justify-center px-5 text-center">
         <!-- الشعار -->
         <div class="mb-4 flex items-center justify-center">
             <img id="brand-logo" 
@@ -110,13 +136,80 @@
             ابـدأ الـتـغـيـيـر الـحـقـيـقـي الآن
         </p>
 
-        <!-- زر ابدأ الآن -->
-        <button onclick="navigateTo('next-section')" class="w-full max-w-[240px] neon-btn active:scale-95 font-black text-lg py-3.5 px-6 rounded-full transition-all duration-200 cursor-pointer">
-            ابدأ الآن
-        </button>
+        <!-- أزرار الصفحة الرئيسية: ابدأ الآن + التدريب أونلاين بجانب بعضهما بتناسق -->
+        <div class="w-full max-w-sm flex items-center justify-center gap-3">
+            <button onclick="navigateTo('next-section')" class="flex-1 neon-btn active:scale-95 font-black text-base sm:text-lg py-3.5 px-4 rounded-full transition-all duration-200 cursor-pointer whitespace-nowrap">
+                ابدأ الآن
+            </button>
+            <button onclick="navigateTo('training-package-section')" class="flex-1 neon-outline-btn active:scale-95 font-black text-base sm:text-lg py-3.5 px-4 rounded-full transition-all duration-200 cursor-pointer whitespace-nowrap">
+                التدريب أونلاين
+            </button>
+        </div>
     </main>
 
-    <!-- القسم الثاني: الصفحة التي تفتح عند الضغط على "ابدأ الآن" (بنفس أسلوب الصفحة القديمة) -->
+    <!-- صفحة باقة التدريب (التدريب أونلاين) بتصميم قوي واحترافي -->
+    <section id="training-package-section" class="hidden flex-grow flex flex-col items-center justify-center px-5 py-3 fade-in overflow-y-auto custom-scroll">
+        <div class="w-full max-w-md bg-gradient-to-b from-zinc-900 to-zinc-950 border-2 border-[#ccff00]/70 rounded-3xl p-5 sm:p-6 shadow-[0_0_35px_rgba(204,255,0,0.14)] relative overflow-hidden">
+            
+            <!-- لمسة توهج خلفية في زاوية البطاقة -->
+            <div class="absolute -top-12 -left-12 w-32 h-32 bg-[#ccff00]/15 rounded-full blur-2xl pointer-events-none"></div>
+
+            <!-- رأس البطاقة: باقة التدريب -->
+            <div class="text-center border-b border-zinc-800/90 pb-4 mb-4">
+                <span class="inline-block bg-[#ccff00]/15 text-[#ccff00] border border-[#ccff00]/40 text-[11px] font-black px-3 py-0.5 rounded-full mb-2 tracking-wide">
+                    ONLINE COACHING
+                </span>
+                <h2 class="text-2xl sm:text-3xl font-black text-white tracking-wide">
+                    باقة <span class="neon-text">التدريب</span>
+                </h2>
+            </div>
+
+            <!-- مميزات الباقة -->
+            <div class="flex flex-col gap-3 text-right mb-5">
+                <!-- البند الأول -->
+                <div class="flex items-start gap-3 bg-black/60 border border-zinc-800/90 hover:border-[#ccff00]/50 transition p-3.5 rounded-2xl">
+                    <div class="w-8 h-8 rounded-xl bg-[#ccff00] text-black flex items-center justify-center shrink-0 mt-0.5 shadow-[0_0_12px_rgba(204,255,0,0.4)]">
+                        <i class="fa-solid fa-dumbbell text-sm"></i>
+                    </div>
+                    <p class="text-zinc-200 text-xs sm:text-sm font-bold leading-relaxed">
+                        جدول مخصص يتم بناؤه استنادًا إلى هدفك، “داخل نطاق تحسين شكل الجسم”، سواء كان المشترك ذكرًا أو أنثى، مع التعديل عند الحاجة.
+                    </p>
+                </div>
+
+                <!-- البند الثاني -->
+                <div class="flex items-start gap-3 bg-black/60 border border-zinc-800/90 hover:border-[#ccff00]/50 transition p-3.5 rounded-2xl">
+                    <div class="w-8 h-8 rounded-xl bg-[#ccff00] text-black flex items-center justify-center shrink-0 mt-0.5 shadow-[0_0_12px_rgba(204,255,0,0.4)]">
+                        <i class="fa-solid fa-fire-flame-curved text-sm"></i>
+                    </div>
+                    <p class="text-zinc-200 text-xs sm:text-sm font-bold leading-relaxed">
+                        جدول تغذية يشمل حساب السعرات و الماكروز
+                    </p>
+                </div>
+
+                <!-- البند الثالث -->
+                <div class="flex items-start gap-3 bg-black/60 border border-zinc-800/90 hover:border-[#ccff00]/50 transition p-3.5 rounded-2xl">
+                    <div class="w-8 h-8 rounded-xl bg-[#ccff00] text-black flex items-center justify-center shrink-0 mt-0.5 shadow-[0_0_12px_rgba(204,255,0,0.4)]">
+                        <i class="fa-solid fa-arrows-rotate text-sm"></i>
+                    </div>
+                    <p class="text-zinc-200 text-xs sm:text-sm font-bold leading-relaxed">
+                        تحديث الخطة كل أسبوعين بناءً على المعطيات، مع الرد على جميع الأسئلة والاستفسارات خلال مدة لا تتجاوز 24 ساعة، ما عدا يوم السبت (الإجازة الأسبوعية)
+                    </p>
+                </div>
+            </div>
+
+            <!-- أزرار التحكم أسفل الباقة -->
+            <div class="flex items-center gap-2.5">
+                <button onclick="navigateTo('next-section')" class="flex-1 neon-btn active:scale-95 font-black text-sm sm:text-base py-3 px-4 rounded-xl transition cursor-pointer">
+                    اشترك الآن
+                </button>
+                <button onclick="navigateTo('home-section')" class="bg-zinc-900 hover:bg-zinc-800 text-zinc-300 hover:text-[#ccff00] text-xs font-extrabold py-3 px-4 rounded-xl transition border border-zinc-800 hover:border-[#ccff00] cursor-pointer">
+                    رجوع
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- القسم الثاني: الصفحة التي تفتح عند الضغط على "ابدأ الآن" أو "اشترك الآن" -->
     <section id="next-section" class="hidden flex-grow flex flex-col items-center justify-center px-6 text-center fade-in overflow-y-auto">
         <div class="w-full max-w-md bg-zinc-950 border border-zinc-800 p-7 rounded-3xl shadow-2xl">
             <h2 class="text-2xl font-black mb-3 text-white">الخطوة <span class="neon-text">الثانية</span></h2>
@@ -129,7 +222,7 @@
         </div>
     </section>
 
-    <!-- القسم الثالث: صفحة "عني" (تفتح من القائمة الجانبية) -->
+    <!-- القسم الثالث: صفحة "عني" -->
     <section id="about-section" class="hidden flex-grow flex flex-col items-center justify-center px-6 text-center fade-in overflow-y-auto">
         <div class="w-full max-w-md bg-zinc-950 border border-[#ccff00]/30 p-7 rounded-3xl shadow-[0_0_25px_rgba(204,255,0,0.08)]">
             <h2 class="text-2xl font-black mb-3 text-white">نبذة <span class="neon-text">عني</span></h2>
@@ -199,7 +292,7 @@
         }
 
         function navigateTo(sectionId) {
-            ['home-section', 'next-section', 'about-section'].forEach(id => {
+            ['home-section', 'training-package-section', 'next-section', 'about-section'].forEach(id => {
                 const el = document.getElementById(id);
                 if (el) el.classList.add('hidden');
             });
